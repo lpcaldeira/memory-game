@@ -21,16 +21,28 @@ let showCards = [];
 
 let shuffleEmojis = emojis.sort(() => (Math.random() > 0.5) ? 2 : -1);
 
-for (let index = 0; index < emojis.length; index++) {
-  let box = document.createElement('div');
-  box.className = 'item';
-  box.innerHTML = shuffleEmojis[index];
-  box.onclick = handleClick;
-  
-  document.querySelector('.game').appendChild(box)
+// auto-run function
+const init = (function autorun(){
+  for (let index = 0; index < emojis.length; index++) {
+    let box = document.createElement('div');
+    box.className = 'item';
+    box.innerHTML = shuffleEmojis[index];
+    box.onclick = handleClick;
+    
+    document.querySelector('.game').appendChild(box)
+  }
+
+  return autorun; // return itself to reference
+}());
+
+async function reset() {
+  const gameBoard = document.querySelector('.game');
+  while (gameBoard.firstChild) {
+    gameBoard.removeChild(gameBoard.lastChild);
+  }
 }
 
-function handleClick() {
+async function handleClick() {
   if (showCards.length < 2) {
     this.classList.add('boxShow');
     showCards.push(this);
@@ -41,7 +53,7 @@ function handleClick() {
   }
 }
 
-function checkMatch() {
+async function checkMatch() {
   if (showCards[0].innerHTML === showCards[1].innerHTML) {
     showCards[0].classList.add('boxMatch');
     showCards[1].classList.add('boxMatch');
@@ -54,5 +66,7 @@ function checkMatch() {
   // end game
   if (document.querySelectorAll('.boxMatch').length === emojis.length) {
     alert('You WIN!');
+    await reset();
+    init();
   }
 }
