@@ -80,7 +80,6 @@ h2 {
   transition: 0.15s;
   transform: rotateX(0deg);
   backface-visibility: hidden;
-  opacity: 0.8; /* habilitar somente durante o desenvolvimento */
 }
 
 .item.boxShow {
